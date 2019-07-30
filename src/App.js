@@ -1,24 +1,30 @@
 import React, { Component } from 'react'
 import './App.scss'
 import { Route } from 'react-router-dom'
-
 import AuthenticatedRoute from './auth/components/AuthenticatedRoute'
 import Header from './header/Header'
 import SignUp from './auth/components/SignUp'
 import SignIn from './auth/components/SignIn'
 import SignOut from './auth/components/SignOut'
 import ChangePassword from './auth/components/ChangePassword'
+import Sidebar from 'react-sidebar'
 
 import Alert from 'react-bootstrap/Alert'
 
 class App extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
 
     this.state = {
       user: null,
-      alerts: []
+      alerts: [],
+      sidebarOpen: false
     }
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this)
+  }
+
+  onSetSidebarOpen (open) {
+    this.setState({ sidebarOpen: open })
   }
 
   setUser = user => this.setState({ user })
@@ -42,6 +48,16 @@ class App extends Component {
             </Alert.Heading>
           </Alert>
         ))}
+        <Sidebar
+          className="sidenav"
+          sidebar={<b>This will hold nations of the given user that is logged in</b>}
+          open={this.state.sidebarOpen}
+          onSetOpen={this.onSetSidebarOpen}
+        >
+          <button className="navbutton" onClick={() => this.onSetSidebarOpen(true)}>
+          Open sidebar
+          </button>
+        </Sidebar>
         <main className="container">
           <Route path='/sign-up' render={() => (
             <SignUp alert={this.alert} setUser={this.setUser} />
